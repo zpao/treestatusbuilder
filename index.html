@@ -1,0 +1,94 @@
+<!doctype html>
+<html>
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8"0>
+
+  <title>Tinderbox Tree Status Message Builder</title>
+  <script src="statusbuilder.js"></script>
+  <style>
+    body, input, textarea {
+      font-family: menlo;
+    }
+    input, textarea {
+      font-size: 16px;
+    }
+    #container {
+      margin: auto;
+      width: 50em;
+    }
+    #statusmessage {
+      height: 25em;
+      width: 50em;
+    }
+    #aftermessage {
+      border: 1px solid #999;
+      width: 50em;
+    }
+
+    #messagetemplate {
+      display: none;
+    }
+  </style>
+
+</head>
+<body>
+  <div id="container">
+    <h1>Tinderbox Tree Status Message Builder</h1>
+    <p>
+      While it's dumb to edit a textarea to close the tree, it's worse that the rules for doing this are in a comment that you must keep intact.
+      Somebody can just come in and blow it away, then it's lost forever.
+      It's also easy to accidentally make "The tree is <span style="color:red">OPEN</span>" happen.
+      And that's silly.
+      <a href="README.md">README</a> (with todos).
+    </p>
+    <form id="statusbuilder">
+      <div>
+        <h2>Tree Status:</h2>
+        <div>
+          <input type="radio" name="treestatus" id="treestatus-open" value="OPEN" checked>
+          <label for="treestatus-open"><strong>OPEN</strong></label>
+        </div>
+        <div>
+          <input type="radio" name="treestatus" id="treestatus-closed" value="CLOSED">
+          <label for="treestatus-closed">
+            <strong>CLOSED</strong>
+            <em>(hg hook enforces that checkins have "CLOSED TREE")</em>
+          </label>
+        </div>
+        <div>
+          <input type="radio" name="treestatus" id="treestatus-approval" value="APPROVAL REQUIRED">
+          <label for="treestatus-approval">
+            <strong>APPROVAL REQUIRED</strong>
+            <em>(hg hook enforces that checkins have "a=" - useful for sheriff-metered pushes)</em>
+          </label>
+        </div>
+      </div> <!-- /treestatus -->
+
+      <div>
+        <h2>Text To Follow</h2>
+        <p>"bug #" is autolinked. A space will be appended and prepended if needed.</p>
+        <input type="text" name="aftermessage" id="aftermessage">
+      </div>
+
+    </form>
+    <h2>Result:</h2>
+    <textarea id="statusmessage"></textarea>
+
+    <textarea id="messagetemplate">
+<p id="status-container"><span id="preamble">The tree is </span>
+<!-- CURRENT TREE STATUS -->
+<!--
+  When managing the tree status:
+    * The status must be exactly one of the following, in ALL CAPS:
+      * OPEN
+      * CLOSED (hg hook enforces that checkins have "CLOSED TREE")
+      * APPROVAL REQUIRED (hg hook enforces that checkins have "a=" - useful for sheriff-metered pushes)
+    * The extended status span must be on the same line as the treestatus.
+    * Please indicate reason for closure, preferably with a bug link.
+    * Please indicate conditions for reopening, especially if you might disappear before reopening the tree yourself.
+    * Please add to https://wiki.mozilla.org/Tree_Closures
+-->
+<span id="treestatus" style="color:{color};">{status}</span>{after}<span id="extended-status"><!-- don't remove or modify extended-status --></span></textarea>
+  </div>
+</body>
+</html>
